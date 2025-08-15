@@ -3,6 +3,7 @@
 #ifndef CTRLSEQ_H
 #define CTRLSEQ_H
 
+#define BEL "\007"
 #define SP " "
 #define ESC "\033"
 #define DCS ESC "P"
@@ -19,6 +20,14 @@
 #define ENABLE_INSERT                                                          \
   CSI "2"                                                                      \
       "~"
+// documentation for DECSET here:
+// https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#:~:text=Automatic%20Newline%20(LNM).-,CSI%20%3F%20Pm%20h,-DEC%20Private%20Mode
+#define DECSET(n) CSI "?" #n "h"
+#define DECRST(n) CSI "?" #n "l"
+// set window title to str
+#define SET_WINDOW_TITLE(str)                                                  \
+  OSC "2"                                                                      \
+      ";" #str ST
 
 // CSI functions
 
@@ -90,6 +99,10 @@
 #define DELETE_LINES(n) CSI #n "M"
 // delete n characters (default = 1)
 #define DELETE_CHARS(n) CSI #n "P"
+// scroll up n lines (default = 1)
+#define SCROLL_UP(n) CSI #n "S"
+// scroll down n lines (default = 1)
+#define SCROLL_DOWN(n) CSI #n "T"
 // erase n character (default = 1)
 #define ERASE_CHARS(n) CSI #n "X"
 // set scrolling region from top to bottom (default = whole screen)
