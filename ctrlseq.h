@@ -20,19 +20,70 @@
 #define ENABLE_INSERT                                                          \
   CSI "2"                                                                      \
       "~"
-// documentation for DECSET here:
-// https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#:~:text=Automatic%20Newline%20(LNM).-,CSI%20%3F%20Pm%20h,-DEC%20Private%20Mode
-#define DECSET(n) CSI "?" #n "h"
-#define DECRST(n) CSI "?" #n "l"
 // set window title to str
 #define SET_WINDOW_TITLE(str)                                                  \
   OSC "2"                                                                      \
       ";" #str ST
 
+// DECSET and DECRST functions
+// documentation for DECSET and DECRST here:
+// https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#:~:text=Automatic%20Newline%20(LNM).-,CSI%20%3F%20Pm%20h,-DEC%20Private%20Mode
+// https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#:~:text=Normal%20Linefeed%20(LNM).-,CSI%20%3F%20Pm%20l,-DEC%20Private%20Mode
+
+// DEC private mode set
+#define DECSET(n) CSI "?" #n "h"
+// DEC private mode reset
+#define DECRST(n) CSI "?" #n "l"
+
+#define SHOW_CURSOR DECSET(25)
+#define HIDE_CURSOR DECRST(25)
+#define SHOW_SCROLLBAR DECSET(30)
+#define HIDE_SCROLLBAR DECRST(30)
+#define USE_ALT_BUFFER DECSET(1049)
+#define USE_MAIN_BUFFER DECRST(1049)
+
+// xterm window manip functions
+
+// perform an xterm window operation
+#define XTWINOPS(n, p1, p2) CSI #n ";" #p1 ";" #p2 "t"
+// de-minimize terminal
+#define DEMINIMIZE XTWINOPS(1)
+// minimize terminal
+#define MINIMIZE XTWINOPS(2)
+// move terminal to (x, y)
+#define MOVE_TERMINAL(x, y) XTWINOPS(3, x, y)
+// resize terminal to given height and width in pixels
+// (omit parameter to keep current, 0 to use display dimension)
+#define RESIZE_TERMINAL_PIXELS(height, width) XTWINOPS(4, height, width)
+// push terminal to the front of the stacking order
+#define PUSH_TO_FRONT XTWINOPS(5)
+// push terminal to the back of the stacking order
+#define PUSH_TO_BACK XTWINOPS(6)
+// refresh terminal window
+#define REFRESH_TERMINAL XTWINOPS(7)
+// resize terminal to given height and width in characters
+// (omit parameter to keep current, 0 to use display dimension)
+#define RESIZE_TERMINAL_CHARS(height, width) XTWINOPS(8, height, width)
+// unmaximize terminal
+#define UNMAXIMIZE XTWINOPS(9, 0)
+// maximize terminal
+#define MAXIMIZE XTWINOPS(9, 1)
+// maximize terminal vertically
+#define MAXIMIZE_VERTICALLY XTWINOPS(9, 2)
+// maximize terminal horizontally
+#define MAXIMIZE_HORIZONTALLY XTWINOPS(9, 3)
+// undo fullscreen
+#define UNFULSCREEN XTWINOPS(10, 0)
+// enable fullscreen
+#define FULLSCREEN XTWINOPS(10, 1)
+// toggle fullscreen
+#define TOGGLE_FULLSCREEN XTWINOPS(10, 2)
+
 // CSI functions
 
 // unused
 // request device attributes (tertiary)
+// would return terminal identifier
 // #define DEVICE_ATTR CSI ">" "c"
 // set cursor column (default = [row, 1])
 // #define CURS_COL_ABS(n) CSI #n "`" // duplicate of CURS_COL
