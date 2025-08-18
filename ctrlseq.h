@@ -144,9 +144,11 @@
 // 1 -> selective left
 // 2 -> selective all
 #define SELECTIVE_ERASE_IN_LINE(e) CSI "?" #e "K"
-// insert n lines (default = 1)
+// insert n lines, pushing any lines including this one downwards and
+// putting the cursor at the start of the line (default = 1)
 #define INSERT_LINES(n) CSI #n "L"
-// delete n lines (default = 1)
+// delete n lines including this one, pulling any lines below upwards and
+// putting the cursor at the start of the line (default = 1)
 #define DELETE_LINES(n) CSI #n "M"
 // delete n characters (default = 1)
 #define DELETE_CHARS(n) CSI #n "P"
@@ -378,6 +380,18 @@ void feature_test() {
   // erase functions
   PRINT_TEST("ERASE DISPLAY/LINE", "123" CURS_DOWN() "456" CURS_UP() SAVE
              "789" RESTORE ERASE_IN_DISPLAY(0) ERASE_IN_LINE(0))
+  // insert/delete lines
+  PRINT_TEST("INSERT/DELETE LINES",
+             "\n"
+             "only this line should be left" CURS_DOWN(
+                 1) "this line should be "
+                    "gone" CURS_DOWN(
+                        1) "this as "
+                           "wel"
+                           "l" CURS_DOWN(1) "yet this one stays" CURS_UP(2)
+                               DELETE_LINES(2) "aaaaaaaaaaaa" INSERT_LINES(
+                                   2) "bbbbbbbbbbbb" CURS_DOWN(2))
+  //
 }
 
 #endif
