@@ -1,0 +1,3 @@
+BasedOnStyle: LLVM
+BreakAdjacentStringLiterals: false
+BreakStringLiterals: true
