@@ -17,13 +17,9 @@
 #define CLEAR ESC "c"   // clear the screen
 #define SAVE ESC "7"    // save position
 #define RESTORE ESC "8" // go to saved position
-#define ENABLE_INSERT                                                          \
-  CSI "2"                                                                      \
-      "~"
+#define ENABLE_INSERT CSI "2" "~"
 // set window title to str
-#define SET_WINDOW_TITLE(str)                                                  \
-  OSC "2"                                                                      \
-      ";" #str ST
+#define SET_WINDOW_TITLE(str) OSC "2" ";" #str ST
 
 // DECSET and DECRST functions
 // documentation for DECSET and DECRST here:
@@ -150,7 +146,7 @@
 // delete n lines including this one, pulling any lines below upwards and
 // putting the cursor at the start of the line (default = 1)
 #define DELETE_LINES(n) CSI #n "M"
-// delete n characters (default = 1)
+// delete n characters, shifting any characters ahead to the left (default = 1)
 #define DELETE_CHARS(n) CSI #n "P"
 // scroll up n lines (default = 1)
 #define SCROLL_UP(n) CSI #n "S"
@@ -164,188 +160,83 @@
 // character attributes
 
 // set text to normal
-#define SET_NORMAL                                                             \
-  CSI "0"                                                                      \
-      "m"
+#define SET_NORMAL CSI "0" "m"
 // set text to bold
-#define SET_BOLD                                                               \
-  CSI "1"                                                                      \
-      "m"
+#define SET_BOLD CSI "1" "m"
 // set text to faint
-#define SET_FAINT                                                              \
-  CSI "2"                                                                      \
-      "m"
+#define SET_FAINT CSI "2" "m"
 // set text to italic
-#define SET_ITALIC                                                             \
-  CSI "3"                                                                      \
-      "m"
+#define SET_ITALIC CSI "3" "m"
 // set text to underlined
-#define SET_UNDERLINED                                                         \
-  CSI "4"                                                                      \
-      "m"
+#define SET_UNDERLINED CSI "4" "m"
 // set text to blink
-#define SET_BLINK                                                              \
-  CSI "5"                                                                      \
-      "m"
+#define SET_BLINK CSI "5" "m"
 // set text to inverse
-#define SET_INVERSE                                                            \
-  CSI "7"                                                                      \
-      "m"
+#define SET_INVERSE CSI "7" "m"
 // set text to hidden
-#define SET_HIDDEN                                                             \
-  CSI "8"                                                                      \
-      "m"
+#define SET_HIDDEN CSI "8" "m"
 // set text to crossed out
-#define SET_STRIKETHROUGH                                                      \
-  CSI "9"                                                                      \
-      "m"
+#define SET_STRIKETHROUGH CSI "9" "m"
 // set text to doubly underlined
-#define SET_DOUBLE_UNDERLINE                                                   \
-  CSI "2"                                                                      \
-      "1"                                                                      \
-      "m"
+#define SET_DOUBLE_UNDERLINE CSI "2" "1" "m"
 // turn off bold and faint
-#define UNSET_BOLD_FAINT                                                       \
-  CSI "2"                                                                      \
-      "2"                                                                      \
-      "m"
+#define UNSET_BOLD_FAINT CSI "2" "2" "m"
 // turn off italics
-#define UNSET_ITALIC                                                           \
-  CSI "2"                                                                      \
-      "3"                                                                      \
-      "m"
+#define UNSET_ITALIC CSI "2" "3" "m"
 // turn off underline
-#define UNSET_UNDERLINE                                                        \
-  CSI "2"                                                                      \
-      "4"                                                                      \
-      "m"
+#define UNSET_UNDERLINE CSI "2" "4" "m"
 // turn off blinking
-#define UNSET_BLINKING                                                         \
-  CSI "2"                                                                      \
-      "5"                                                                      \
-      "m"
+#define UNSET_BLINKING CSI "2" "5" "m"
 // turn off inverse
-#define UNSET_INVERSE                                                          \
-  CSI "2"                                                                      \
-      "7"                                                                      \
-      "m"
+#define UNSET_INVERSE CSI "2" "7" "m"
 // turn off hidden
-#define UNSET_HIDDEN                                                           \
-  CSI "2"                                                                      \
-      "8"                                                                      \
-      "m"
+#define UNSET_HIDDEN CSI "2" "8" "m"
 // turn off crossed out
-#define UNSET_STRIKETHROUGH                                                    \
-  CSI "2"                                                                      \
-      "9"                                                                      \
-      "m"
+#define UNSET_STRIKETHROUGH CSI "2" "9" "m"
 // set foreground color to black
-#define FG_COLOR_BLACK                                                         \
-  CSI "3"                                                                      \
-      "0"                                                                      \
-      "m"
+#define FG_COLOR_BLACK CSI "3" "0" "m"
 // set foreground color to red
-#define FG_COLOR_RED                                                           \
-  CSI "3"                                                                      \
-      "1"                                                                      \
-      "m"
+#define FG_COLOR_RED CSI "3" "1" "m"
 // set foreground color to green
-#define FG_COLOR_GREEN                                                         \
-  CSI "3"                                                                      \
-      "2"                                                                      \
-      "m"
+#define FG_COLOR_GREEN CSI "3" "2" "m"
 // set foreground color to yellow
-#define FG_COLOR_YELLOW                                                        \
-  CSI "3"                                                                      \
-      "3"                                                                      \
-      "m"
+#define FG_COLOR_YELLOW CSI "3" "3" "m"
 // set foreground color to blue
-#define FG_COLOR_BLUE                                                          \
-  CSI "3"                                                                      \
-      "4"                                                                      \
-      "m"
+#define FG_COLOR_BLUE CSI "3" "4" "m"
 // set foreground color to magenta
-#define FG_COLOR_MAGENTA                                                       \
-  CSI "3"                                                                      \
-      "5"                                                                      \
-      "m"
+#define FG_COLOR_MAGENTA CSI "3" "5" "m"
 // set foreground color to cyan
-#define FG_COLOR_CYAN                                                          \
-  CSI "3"                                                                      \
-      "6"                                                                      \
-      "m"
+#define FG_COLOR_CYAN CSI "3" "6" "m"
 // set foreground color to white
-#define FG_COLOR_WHITE                                                         \
-  CSI "3"                                                                      \
-      "7"                                                                      \
-      "m"
+#define FG_COLOR_WHITE CSI "3" "7" "m"
 // set foreground color to default
-#define FG_COLOR_DEFAULT                                                       \
-  CSI "3"                                                                      \
-      "9"                                                                      \
-      "m"
+#define FG_COLOR_DEFAULT CSI "3" "9" "m"
 // set background color to black
-#define BG_COLOR_BLACK                                                         \
-  CSI "4"                                                                      \
-      "0"                                                                      \
-      "m"
+#define BG_COLOR_BLACK CSI "4" "0" "m"
 // set background color to red
-#define BG_COLOR_RED                                                           \
-  CSI "4"                                                                      \
-      "1"                                                                      \
-      "m"
+#define BG_COLOR_RED CSI "4" "1" "m"
 // set background color to green
-#define BG_COLOR_GREEN                                                         \
-  CSI "4"                                                                      \
-      "2"                                                                      \
-      "m"
+#define BG_COLOR_GREEN CSI "4" "2" "m"
 // set background color to yellow
-#define BG_COLOR_YELLOW                                                        \
-  CSI "4"                                                                      \
-      "3"                                                                      \
-      "m"
+#define BG_COLOR_YELLOW CSI "4" "3" "m"
 // set background color to blue
-#define BG_COLOR_BLUE                                                          \
-  CSI "4"                                                                      \
-      "4"                                                                      \
-      "m"
+#define BG_COLOR_BLUE CSI "4" "4" "m"
 // set background color to magenta
-#define BG_COLOR_MAGENTA                                                       \
-  CSI "4"                                                                      \
-      "5"                                                                      \
-      "m"
+#define BG_COLOR_MAGENTA CSI "4" "5" "m"
 // set background color to cyan
-#define BG_COLOR_CYAN                                                          \
-  CSI "4"                                                                      \
-      "6"                                                                      \
-      "m"
+#define BG_COLOR_CYAN CSI "4" "6" "m"
 // set background color to white
-#define BG_COLOR_WHITE                                                         \
-  CSI "4"                                                                      \
-      "7"                                                                      \
-      "m"
+#define BG_COLOR_WHITE CSI "4" "7" "m"
 // set background color to default
-#define BG_COLOR_DEFAULT                                                       \
-  CSI "4"                                                                      \
-      "9"                                                                      \
-      "m"
+#define BG_COLOR_DEFAULT CSI "4" "9" "m"
 // set foreground color using r, g, and b values
-#define FG_COLOR_RBG(r, g, b)                                                  \
-  CSI "3"                                                                      \
-      "8"                                                                      \
-      ";"                                                                      \
-      "2"                                                                      \
-      ";" #r ";" #g ";" #b "m"
+#define FG_COLOR_RBG(r, g, b) CSI "3" "8" ";" "2" ";" #r ";" #g ";" #b "m"
 // set baground color using r, g, and b values
-#define BG_COLOR_RBG(r, g, b)                                                  \
-  CSI "4"                                                                      \
-      "8"                                                                      \
-      ";"                                                                      \
-      "2"                                                                      \
-      ";" #r ";" #g ";" #b "m"
+#define BG_COLOR_RBG(r, g, b) CSI "4" "8" ";" "2" ";" #r ";" #g ";" #b "m"
 
 #define QUICK_PRINT(args) std::cout << args;
 #define PRINT_TEST(name, args) QUICK_PRINT(name " / " args " || ")
+// clang-format off
 void feature_test() {
   // clear screen first
   QUICK_PRINT(CLEAR)
@@ -354,18 +245,17 @@ void feature_test() {
   // insert blanks
   PRINT_TEST("BLANKS", "1234" INSERT_BLANKS(2) "78")
   // text shift left/right
-  PRINT_TEST("TEXT SHIFT LEFT/RIGHT", "\n" SAVE "12345678" SHIFT_LEFT(
-                                          2) "cont" RESTORE SHIFT_RIGHT(2) "\n")
+  PRINT_TEST("TEXT SHIFT LEFT/RIGHT", "\n" SAVE "12345678" SHIFT_LEFT(2) 
+             "cont" RESTORE SHIFT_RIGHT(2) "\n")
   // cursor directions
-  PRINT_TEST("CURSOR U/D/L/R", "UL" CURS_RIGHT() "UR" CURS_DOWN() CURS_LEFT(
-                                   2) "LR" SAVE CURS_LEFT(5) "LL" RESTORE)
+  PRINT_TEST("CURSOR U/D/L/R", "UL" CURS_RIGHT() "UR" CURS_DOWN() CURS_LEFT(2)
+             "LR" SAVE CURS_LEFT(5) "LL" RESTORE)
   // new lines
   PRINT_TEST("NEW LINES", CURS_NL(2) "2 down" CURS_PRE() "1 up" CURS_NL(
                               2) "2 down once more")
   // column manip
-  PRINT_TEST("CURS COL", "\n"
-                         "123" CURS_COL_REL(5) "90" CURS_COL() "abc45678"
-                                                               "\n")
+  PRINT_TEST("CURS COL",
+             "\n" "123" CURS_COL_REL(5) "90" CURS_COL() "abc45678" "\n")
   // line manip
   PRINT_TEST("CURS LINE",
              "123" CURS_LINE_REL() "456" SAVE CURS_LINE() "~~~" RESTORE "\n")
@@ -375,23 +265,20 @@ void feature_test() {
   // cursor shift left/right
   PRINT_TEST("CURS TAB LEFT/RIGHT",
              "\n" SAVE "0t" RESTORE CURS_SHIFT_TAB_RIGHT(2) SAVE
-             "2t" RESTORE CURS_SHIFT_TAB_LEFT(1) "1t"
-                                                 "\n")
+             "2t" RESTORE CURS_SHIFT_TAB_LEFT(1) "1t" "\n")
   // erase functions
   PRINT_TEST("ERASE DISPLAY/LINE", "123" CURS_DOWN() "456" CURS_UP() SAVE
              "789" RESTORE ERASE_IN_DISPLAY(0) ERASE_IN_LINE(0))
   // insert/delete lines
   PRINT_TEST("INSERT/DELETE LINES",
-             "\n"
-             "only this line should be left" CURS_DOWN(
-                 1) "this line should be "
-                    "gone" CURS_DOWN(
-                        1) "this as "
-                           "wel"
-                           "l" CURS_DOWN(1) "yet this one stays" CURS_UP(2)
-                               DELETE_LINES(2) "aaaaaaaaaaaa" INSERT_LINES(
-                                   2) "bbbbbbbbbbbb" CURS_DOWN(2))
-  //
+             "\n" "only this line should be left" CURS_DOWN(1)
+             "this line should be gone" CURS_DOWN(1) "this as well" CURS_DOWN(1)
+             "yet this one stays" CURS_UP(2) DELETE_LINES(2) "aaaaaaaaaaaa"
+             INSERT_LINES(2) "bbbbbbbbbbbb" CURS_DOWN(2))
+  // delete characters
+  PRINT_TEST("DELETE CHARS",
+             "123456789" SAVE CURS_LEFT(4) DELETE_CHARS(1) RESTORE)
 }
+// clang-format on
 
 #endif
