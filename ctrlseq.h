@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <iostream>
 
 #ifndef CTRLSEQ_H
@@ -43,37 +44,37 @@
 // perform an xterm window operation
 #define XTWINOPS(n, p1, p2) CSI #n ";" #p1 ";" #p2 "t"
 // de-minimize terminal
-#define DEMINIMIZE XTWINOPS(1)
+#define DEMINIMIZE XTWINOPS(1, , )
 // minimize terminal
-#define MINIMIZE XTWINOPS(2)
+#define MINIMIZE XTWINOPS(2, , )
 // move terminal to (x, y)
 #define MOVE_TERMINAL(x, y) XTWINOPS(3, x, y)
 // resize terminal to given height and width in pixels
 // (omit parameter to keep current, 0 to use display dimension)
 #define RESIZE_TERMINAL_PIXELS(height, width) XTWINOPS(4, height, width)
-// push terminal to the front of the stacking order
-#define PUSH_TO_FRONT XTWINOPS(5)
-// push terminal to the back of the stacking order
-#define PUSH_TO_BACK XTWINOPS(6)
-// refresh terminal window
-#define REFRESH_TERMINAL XTWINOPS(7)
 // resize terminal to given height and width in characters
 // (omit parameter to keep current, 0 to use display dimension)
 #define RESIZE_TERMINAL_CHARS(height, width) XTWINOPS(8, height, width)
+// push terminal to the front of the stacking order
+#define PUSH_TO_FRONT XTWINOPS(5, , )
+// push terminal to the back of the stacking order
+#define PUSH_TO_BACK XTWINOPS(6, , )
+// refresh terminal window
+#define REFRESH_TERMINAL XTWINOPS(7, , )
 // unmaximize terminal
-#define UNMAXIMIZE XTWINOPS(9, 0)
+#define UNMAXIMIZE XTWINOPS(9, 0, )
 // maximize terminal
-#define MAXIMIZE XTWINOPS(9, 1)
+#define MAXIMIZE XTWINOPS(9, 1, )
 // maximize terminal vertically
-#define MAXIMIZE_VERTICALLY XTWINOPS(9, 2)
+#define MAXIMIZE_VERTICALLY XTWINOPS(9, 2, )
 // maximize terminal horizontally
-#define MAXIMIZE_HORIZONTALLY XTWINOPS(9, 3)
+#define MAXIMIZE_HORIZONTALLY XTWINOPS(9, 3, )
 // undo fullscreen
-#define UNFULSCREEN XTWINOPS(10, 0)
+#define UNFULSCREEN XTWINOPS(10, 0, )
 // enable fullscreen
-#define FULLSCREEN XTWINOPS(10, 1)
+#define FULLSCREEN XTWINOPS(10, 1, )
 // toggle fullscreen
-#define TOGGLE_FULLSCREEN XTWINOPS(10, 2)
+#define TOGGLE_FULLSCREEN XTWINOPS(10, 2, )
 
 // CSI functions
 
@@ -148,12 +149,14 @@
 #define DELETE_LINES(n) CSI #n "M"
 // delete n characters, shifting any characters ahead to the left (default = 1)
 #define DELETE_CHARS(n) CSI #n "P"
+// erase n characters to the right (default = 1)
+#define ERASE_CHARS(n) CSI #n "X"
 // scroll up n lines (default = 1)
 #define SCROLL_UP(n) CSI #n "S"
 // scroll down n lines (default = 1)
 #define SCROLL_DOWN(n) CSI #n "T"
-// erase n character (default = 1)
-#define ERASE_CHARS(n) CSI #n "X"
+// repeat previous character n times
+#define REPEAT_CHAR(n) CSI #n "b"
 // set scrolling region from top to bottom (default = whole screen)
 #define SET_SCROLLING_REGION(top, bottom) CSI #top ";" #bottom "r"
 
@@ -251,8 +254,8 @@ void feature_test() {
   PRINT_TEST("CURSOR U/D/L/R", "UL" CURS_RIGHT() "UR" CURS_DOWN() CURS_LEFT(2)
              "LR" SAVE CURS_LEFT(5) "LL" RESTORE)
   // new lines
-  PRINT_TEST("NEW LINES", CURS_NL(2) "2 down" CURS_PRE() "1 up" CURS_NL(
-                              2) "2 down once more")
+  PRINT_TEST("NEW LINES", CURS_NL(2) "2 down" CURS_PRE() "1 up" CURS_NL(2)
+             "2 down once more")
   // column manip
   PRINT_TEST("CURS COL",
              "\n" "123" CURS_COL_REL(5) "90" CURS_COL() "abc45678" "\n")
@@ -260,8 +263,8 @@ void feature_test() {
   PRINT_TEST("CURS LINE",
              "123" CURS_LINE_REL() "456" SAVE CURS_LINE() "~~~" RESTORE "\n")
   // position
-  PRINT_TEST("POSITION", SAVE "look at the top left corner ;3" CURS_POS(
-                             0, 0) "~~REPLACED~~" RESTORE "\n")
+  PRINT_TEST("POSITION", SAVE "look at the top left corner ;3" CURS_POS(0, 0)
+             "~~REPLACED~~" RESTORE "\n")
   // cursor shift left/right
   PRINT_TEST("CURS TAB LEFT/RIGHT",
              "\n" SAVE "0t" RESTORE CURS_SHIFT_TAB_RIGHT(2) SAVE
@@ -274,10 +277,12 @@ void feature_test() {
              "\n" "only this line should be left" CURS_DOWN(1)
              "this line should be gone" CURS_DOWN(1) "this as well" CURS_DOWN(1)
              "yet this one stays" CURS_UP(2) DELETE_LINES(2) "aaaaaaaaaaaa"
-             INSERT_LINES(2) "bbbbbbbbbbbb" CURS_DOWN(2))
+             INSERT_LINES(2) "bbbbbbbbbbbb" CURS_DOWN(2) "\n")
   // delete characters
   PRINT_TEST("DELETE CHARS",
              "123456789" SAVE CURS_LEFT(4) DELETE_CHARS(1) RESTORE)
+  // erase chars
+  PRINT_TEST("ERASE CHARS", SAVE "123456789" RESTORE ERASE_CHARS(5) "\n")
 }
 // clang-format on
 
