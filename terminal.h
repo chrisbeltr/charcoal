@@ -1,10 +1,14 @@
 #include "termctl.h"
 
+#ifndef TERMINAL_H
+#define TERMINAL_H
+
 /*
  * perform initialization of necessary library components.
  * call this at the start of your program. only use once.
  */
 void term_init() {
+#if defined(__unix__) || defined(__APPLE__)
   get_terminal_attrs();
   *initial_attrs = *terminal_attrs;
   // disabling cannonical mode does the following:
@@ -16,6 +20,10 @@ void term_init() {
   // namely, we want read() to return immediately
   terminal_attrs->c_cc[VMIN] = 0;
   terminal_attrs->c_cc[VTIME] = 0;
+#elif defined(_WIN32)
+  printf("sorry! doesn't work on windows yet!");
+  exit(1);
+#endif
 }
 
 /*
@@ -26,10 +34,16 @@ void term_init() {
  * users may have to restart their terminal to restore normal function.
  */
 void term_cleanup() {
+#if defined(__unix__) || defined(__APPLE__)
   // reset to initial attributes
   *terminal_attrs = *initial_attrs;
   set_terminal_attrs();
   // destroy structs
   delete terminal_attrs;
   delete initial_attrs;
+#elif defined(_WIN32)
+  // not implemented yet broken heart emoji
+#endif
 }
+
+#endif

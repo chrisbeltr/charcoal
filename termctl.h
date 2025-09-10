@@ -9,6 +9,8 @@
 // most of these are implemented using:
 //   sys/ioctl.h on linux and posix systems
 
+#if defined(__unix__) || defined(__APPLE__)
+
 /*
  * get the dimensions of the terminal window, in characters
  *
@@ -22,10 +24,14 @@ void get_window_size(int *cols, int *rows) {
   *rows = s.ws_row;
 }
 
+#endif
+
 // !~~~ TOGGLEABLE FEATURES ~~~!
 // these are features that enable or disable a certain terminal effect
 // most of these are implemented using:
 //   termios.h and ctrlseq.h on linux and posix systems
+
+#if defined(__unix__) || defined(__APPLE__)
 
 // start of termios function macros
 // clang-format off
@@ -51,5 +57,7 @@ termios *initial_attrs = new termios;
 #define disable_echo() disable_feature(ECHO);
 // toggle echo to the opposite of its current state
 #define toggle_echo() toggle_feature(ECHO);
+
+#endif
 
 #endif // TERMCTL_H
