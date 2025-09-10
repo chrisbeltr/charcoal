@@ -12,6 +12,10 @@ void term_init() {
   // read() can be non-blocking
   // line editing (done by the terminal) is disabled
   disable_feature(ICANON);
+  // edit the termios struct to configure the read() behavior we want
+  // namely, we want read() to return immediately
+  terminal_attrs->c_cc[VMIN] = 0;
+  terminal_attrs->c_cc[VTIME] = 0;
 }
 
 /*

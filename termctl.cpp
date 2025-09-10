@@ -1,4 +1,6 @@
-#include "termctl.h"
+#include "terminal.h"
+
+#include <cctype>
 #include <csignal>
 #include <cstdio>
 #include <cstdlib>
@@ -35,8 +37,23 @@ int main(int argc, char const *argv[]) {
     exit_program->sa_handler = &exit_function;
     // ctrl + c -> SIGINT
     sigaction(SIGINT, exit_program, nullptr);
+    
+    int cols; int rows;
     while (1) {
-      // absolutely nothing mwahahahaha
+      get_window_size(&cols, &rows);
+      // terminal is way too slow to be printing so often, even if it's just a
+      // little bit of text. framebuffer needs to be implemented.
+      // printf(CLEAR "window size: %d x %d", cols, rows);
+      char b[5] = {'\0'};
+      int s = read(0, b, 4);
+      b[s+1] = '\0';
+      if (s) {
+        printf("raw bytes read: ");
+        for (int i = 0; i < s; i++) {
+          printf("%#2hhx ", b[i]);
+        }
+        printf("\nread %d chars: %s\n", s, b);
+      }
     }
   }
   return 0;
