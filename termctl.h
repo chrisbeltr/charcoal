@@ -19,17 +19,19 @@
  * @param cols pointer to an `int`, where the horizontal size will be stored
  * @param rows pointer to an `int`, where the vertical size will be stored
  */
-void get_window_size(int *cols, int *rows) {
+int get_window_size(int *cols, int *rows) {
   struct winsize s = {};
   ioctl(0, TIOCGWINSZ, &s);
   *cols = s.ws_col;
   *rows = s.ws_row;
+  return 0;
 }
 
 #elif defined(_WIN32)
 
-void get_window_size(int *cols, int *rows) {
+int get_window_size(int *cols, int *rows) {
   printf("get_window_size is not implemented on windows yet.");
+  return 1;
 }
 
 #endif
@@ -68,9 +70,9 @@ termios *initial_attrs = new termios;
 
 #elif defined(_WIN32)
 
-#define enable_echo() printf("echo functions are not implemented on windows yet.");
-#define disable_echo() printf("echo functions are not implemented on windows yet.");
-#define toggle_echo() printf("echo functions are not implemented on windows yet.");
+#define enable_echo() ({printf("echo functions are not implemented on windows yet."); 1;})
+#define disable_echo() ({printf("echo functions are not implemented on windows yet."); 1;})
+#define toggle_echo() ({printf("echo functions are not implemented on windows yet."); 1;})
 
 #endif
 

@@ -7,7 +7,7 @@
  * perform initialization of necessary library components.
  * call this at the start of your program. only use once.
  */
-void term_init() {
+int term_init() {
 #if defined(__unix__) || defined(__APPLE__)
   get_terminal_attrs();
   *initial_attrs = *terminal_attrs;
@@ -20,9 +20,11 @@ void term_init() {
   // namely, we want read() to return immediately
   terminal_attrs->c_cc[VMIN] = 0;
   terminal_attrs->c_cc[VTIME] = 0;
+
+  return 0;
 #elif defined(_WIN32)
   printf("initialization not required on windows yet.");
-  // exit(1);
+  return 1;
 #endif
 }
 
@@ -33,7 +35,7 @@ void term_init() {
  * if this function call is skipped (e.g. premature exit due to crash),
  * users may have to restart their terminal to restore normal function.
  */
-void term_cleanup() {
+int term_cleanup() {
 #if defined(__unix__) || defined(__APPLE__)
   // reset to initial attributes
   *terminal_attrs = *initial_attrs;
@@ -41,8 +43,10 @@ void term_cleanup() {
   // destroy structs
   delete terminal_attrs;
   delete initial_attrs;
+  return 0;
 #elif defined(_WIN32)
   printf("cleanup not required on windows yet.");
+  return 1;
 #endif
 }
 
