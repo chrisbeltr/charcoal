@@ -21,8 +21,8 @@ void term_init() {
   terminal_attrs->c_cc[VMIN] = 0;
   terminal_attrs->c_cc[VTIME] = 0;
 #elif defined(_WIN32)
-  printf("sorry! doesn't work on windows yet!");
-  exit(1);
+  printf("initialization not required on windows yet.");
+  // exit(1);
 #endif
 }
 
@@ -42,7 +42,7 @@ void term_cleanup() {
   delete terminal_attrs;
   delete initial_attrs;
 #elif defined(_WIN32)
-  // not implemented yet broken heart emoji
+  printf("cleanup not required on windows yet.");
 #endif
 }
 
