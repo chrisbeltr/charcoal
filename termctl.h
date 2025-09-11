@@ -26,6 +26,12 @@ void get_window_size(int *cols, int *rows) {
   *rows = s.ws_row;
 }
 
+#elif defined(_WIN32)
+
+void get_window_size(int *cols, int *rows) {
+  printf("get_window_size is not implemented on windows yet.");
+}
+
 #endif
 
 // !~~~ TOGGLEABLE FEATURES ~~~!
@@ -59,6 +65,12 @@ termios *initial_attrs = new termios;
 #define disable_echo() disable_feature(ECHO);
 // toggle echo to the opposite of its current state
 #define toggle_echo() toggle_feature(ECHO);
+
+#elif defined(_WIN32)
+
+#define enable_echo() printf("echo functions are not implemented on windows yet.");
+#define disable_echo() printf("echo functions are not implemented on windows yet.");
+#define toggle_echo() printf("echo functions are not implemented on windows yet.");
 
 #endif
 
