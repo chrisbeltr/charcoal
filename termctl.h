@@ -1,6 +1,9 @@
+#include <unistd.h>
+#if _POSIX_VERSION >= 200112L
+#include <termios.h>
+#endif
 #if defined(__unix__) || defined(__APPLE__)
 #include <sys/ioctl.h>
-#include <termios.h>
 #endif
 
 #ifndef TERMCTL_H
@@ -41,7 +44,7 @@ int get_window_size(int *cols, int *rows) {
 // most of these are implemented using:
 //   termios.h and ctrlseq.h on linux and posix systems
 
-#if defined(__unix__) || defined(__APPLE__)
+#if _POSIX_VERSION >= 200112L
 
 // start of termios function macros
 // clang-format off
