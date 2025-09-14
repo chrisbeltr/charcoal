@@ -1,8 +1,8 @@
 #include <unistd.h>
-#if _POSIX_VERSION >= 200112L
+#if (defined(__linux__) || defined(__APPLE__)) && _POSIX_VERSION >= 200112L
 #include <termios.h>
 #endif
-#if defined(__unix__) || defined(__APPLE__)
+#if defined(__linux__) || defined(__APPLE__)
 #include <sys/ioctl.h>
 #endif
 
@@ -14,7 +14,7 @@
 // most of these are implemented using:
 //   sys/ioctl.h on linux and posix systems
 
-#if defined(__unix__) || defined(__APPLE__)
+#if defined(__linux__) || defined(__APPLE__)
 
 /*
  * get the dimensions of the terminal window, in characters
@@ -44,7 +44,7 @@ int get_window_size(int *cols, int *rows) {
 // most of these are implemented using:
 //   termios.h and ctrlseq.h on linux and posix systems
 
-#if _POSIX_VERSION >= 200112L
+#if (defined(__linux__) || defined(__APPLE__)) && _POSIX_VERSION >= 200112L
 
 // start of termios function macros
 // clang-format off

@@ -33,8 +33,7 @@ int main(int argc, char const *argv[]) {
 
   // to test keyboard and user input related features
   {
-    // sigaction is posix only
-    #if defined(__unix__)
+    // only tested on linux!!
     struct sigaction *exit_program = new struct sigaction;
     exit_program->sa_handler = &exit_function;
     // ctrl + c -> SIGINT
@@ -57,7 +56,6 @@ int main(int argc, char const *argv[]) {
         printf("\nread %d chars: %s\n", s, b);
       }
     }
-    #endif
   }
   return 0;
 }

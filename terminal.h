@@ -8,7 +8,7 @@
  * call this at the start of your program. only use once.
  */
 int term_init() {
-#if defined(__unix__) || defined(__APPLE__)
+#if defined(__linux__) || defined(__APPLE__)
   get_terminal_attrs();
   *initial_attrs = *terminal_attrs;
   // disabling cannonical mode does the following:
