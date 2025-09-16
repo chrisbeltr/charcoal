@@ -1,9 +1,9 @@
 #include <unistd.h>
-#if (defined(__linux__) || defined(__APPLE__)) && _POSIX_VERSION >= 200112L
-#include <termios.h>
-#endif
-#if defined(__linux__) || defined(__APPLE__)
+#if defined(_WIN32)
+#include <Windows.h>
+#else // defined(__linux__) || defined(__APPLE__)
 #include <sys/ioctl.h>
+#include <termios.h>
 #endif
 
 #ifndef TERMCTL_H
@@ -14,7 +14,14 @@
 // most of these are implemented using:
 //   sys/ioctl.h on linux and posix systems
 
-#if defined(__linux__) || defined(__APPLE__)
+#if defined(_WIN32)
+
+int get_window_size(int *cols, int *rows) {
+  printf("get_window_size is not implemented on windows yet.");
+  return 1;
+}
+
+#else // defined(__linux__) || defined(__APPLE__)
 
 /*
  * get the dimensions of the terminal window, in characters
@@ -30,13 +37,6 @@ int get_window_size(int *cols, int *rows) {
   return 0;
 }
 
-#elif defined(_WIN32)
-
-int get_window_size(int *cols, int *rows) {
-  printf("get_window_size is not implemented on windows yet.");
-  return 1;
-}
-
 #endif
 
 // !~~~ TOGGLEABLE FEATURES ~~~!
@@ -44,10 +44,16 @@ int get_window_size(int *cols, int *rows) {
 // most of these are implemented using:
 //   termios.h and ctrlseq.h on linux and posix systems
 
-#if (defined(__linux__) || defined(__APPLE__)) && _POSIX_VERSION >= 200112L
+// clang-format off
+#if defined(_WIN32)
+
+#define enable_echo() ({printf("echo functions are not implemented on windows yet."); 1;})
+#define disable_echo() ({printf("echo functions are not implemented on windows yet."); 1;})
+#define toggle_echo() ({printf("echo functions are not implemented on windows yet."); 1;})
+
+#else // (defined(__linux__) || defined(__APPLE__)) && _POSIX_VERSION >= 200112L
 
 // start of termios function macros
-// clang-format off
 
 // storage for current terminal attributes
 termios *terminal_attrs = new termios;
@@ -70,12 +76,6 @@ termios *initial_attrs = new termios;
 #define disable_echo() disable_feature(ECHO);
 // toggle echo to the opposite of its current state
 #define toggle_echo() toggle_feature(ECHO);
-
-#elif defined(_WIN32)
-
-#define enable_echo() ({printf("echo functions are not implemented on windows yet."); 1;})
-#define disable_echo() ({printf("echo functions are not implemented on windows yet."); 1;})
-#define toggle_echo() ({printf("echo functions are not implemented on windows yet."); 1;})
 
 #endif
 
