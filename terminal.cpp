@@ -8,27 +8,20 @@
 // clang-format off
 
 void exit_function(int sig) {
-  // all changes we want to roll back after testing
-  {
-    enable_echo();
-  }
+  // clean up terminal before exiting
+  term_cleanup();
   exit(0);
 }
 
 int main(int argc, char const *argv[]) {
   term_init();
 
-  // testing for non-toggleable features
+  // terminal.h function testing
   {
     int cols;
     int rows;
     get_window_size(&cols, &rows);
     printf("window is %d cols by %d rows\n", cols, rows);
-  }
-
-  // all changes that we want to perform for testing
-  {
-    disable_echo();
   }
 
   // to test keyboard and user input related features
@@ -47,7 +40,7 @@ int main(int argc, char const *argv[]) {
       // printf(CLEAR "window size: %d x %d", cols, rows);
       char b[5] = {'\0'};
       int s = read(0, b, 4);
-      b[s+1] = '\0';
+      b[s] = '\0';
       if (s) {
         printf("raw bytes read: ");
         for (int i = 0; i < s; i++) {
