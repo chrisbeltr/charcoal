@@ -5,7 +5,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-using namespace terminal;
+using namespace charcoal;
 
 // clang-format off
 
