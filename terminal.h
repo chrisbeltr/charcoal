@@ -93,6 +93,6 @@ int cleanup_terminal() {
 #endif
 }
 
-} // namespace terminal
+} // namespace charcoal
 
 #endif
