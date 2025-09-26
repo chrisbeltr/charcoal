@@ -4,6 +4,8 @@
 #ifndef CTRLSEQ_H
 #define CTRLSEQ_H
 
+namespace charcoal {
+
 #define BEL "\007"
 #define SP " "
 #define ESC "\033"
@@ -285,5 +287,7 @@ void feature_test() {
   PRINT_TEST("ERASE CHARS", SAVE "123456789" RESTORE ERASE_CHARS(5) "\n")
 }
 // clang-format on
+
+} // namespace charcoal
 
 #endif
