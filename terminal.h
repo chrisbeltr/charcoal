@@ -7,13 +7,18 @@
 #include <Windows.h>
 #endif
 
+// project includes
+#include "ctrlseq.h"
+
 #ifndef TERMINAL_H
 #define TERMINAL_H
+
+namespace terminal {
 
 // !~~~ DATA ~~~!
 
 #if defined(__linux__) || defined(__APPLE__)
-termios *terminal_attrs = new termios;
+termios *attrs = new termios;
 termios *initial_attrs = new termios;
 #endif
 
@@ -25,7 +30,7 @@ termios *initial_attrs = new termios;
  * @param cols pointer to an `int`, where the horizontal size will be stored
  * @param rows pointer to an `int`, where the vertical size will be stored
  */
-int get_window_size(int *cols, int *rows) {
+int get_terminal_size(int *cols, int *rows) {
 #if defined(__linux__) || defined(__APPLE__)
   struct winsize s = {};
   ioctl(0, TIOCGWINSZ, &s);
@@ -42,22 +47,22 @@ int get_window_size(int *cols, int *rows) {
  * perform initialization of necessary library components.
  * call this at the start of your program. only use once.
  */
-int term_init() {
+int initialize_terminal() {
 #if defined(__linux__) || defined(__APPLE__)
-  tcgetattr(STDIN_FILENO, terminal_attrs);
-  *initial_attrs = *terminal_attrs;
+  tcgetattr(STDIN_FILENO, attrs);
+  *initial_attrs = *attrs;
   // disabling cannonical mode does the following:
   // input can be read without pressing enter
   // read() can be non-blocking
   // line editing (done by the terminal) is disabled
-  terminal_attrs->c_lflag &= ~(ECHO | ICANON);
+  attrs->c_lflag &= ~(ECHO | ICANON);
   // edit the termios struct to configure the read() behavior we want
   // namely, we want read() to return immediately
-  terminal_attrs->c_cc[VMIN] = 0;
-  terminal_attrs->c_cc[VTIME] = 0;
+  attrs->c_cc[VMIN] = 0;
+  attrs->c_cc[VTIME] = 0;
 
   // set the new attributes
-  tcsetattr(STDIN_FILENO, TCSANOW, terminal_attrs);
+  tcsetattr(STDIN_FILENO, TCSANOW, attrs);
 
   return 0;
 #elif defined(_WIN32)
@@ -73,13 +78,13 @@ int term_init() {
  * if this function call is skipped (e.g. premature exit due to crash),
  * users may have to restart their terminal to restore normal function.
  */
-int term_cleanup() {
+int cleanup_terminal() {
 #if defined(__unix__) || defined(__APPLE__)
   // reset to initial attributes
-  *terminal_attrs = *initial_attrs;
+  *attrs = *initial_attrs;
   tcsetattr(STDIN_FILENO, TCSANOW, initial_attrs);
   // destroy structs
-  delete terminal_attrs;
+  delete attrs;
   delete initial_attrs;
   return 0;
 #elif defined(_WIN32)
@@ -87,5 +92,7 @@ int term_cleanup() {
   return 1;
 #endif
 }
+
+} // namespace terminal
 
 #endif

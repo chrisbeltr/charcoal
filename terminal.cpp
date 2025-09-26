@@ -5,22 +5,24 @@
 #include <cstdio>
 #include <cstdlib>
 
+using namespace terminal;
+
 // clang-format off
 
 void exit_function(int sig) {
   // clean up terminal before exiting
-  term_cleanup();
+  cleanup_terminal();
   exit(0);
 }
 
 int main(int argc, char const *argv[]) {
-  term_init();
+  initialize_terminal();
 
   // terminal.h function testing
   {
     int cols;
     int rows;
-    get_window_size(&cols, &rows);
+    get_terminal_size(&cols, &rows);
     printf("window is %d cols by %d rows\n", cols, rows);
   }
 
@@ -34,7 +36,7 @@ int main(int argc, char const *argv[]) {
     
     int cols; int rows;
     while (1) {
-      get_window_size(&cols, &rows);
+      get_terminal_size(&cols, &rows);
       // terminal is way too slow to be printing so often, even if it's just a
       // little bit of text. framebuffer needs to be implemented.
       // printf(CLEAR "window size: %d x %d", cols, rows);
