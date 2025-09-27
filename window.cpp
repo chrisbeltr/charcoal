@@ -1,9 +1,9 @@
-#include "window.h"
+﻿#include "window.h"
 
 using namespace charcoal;
 
-std::vector<CHAR_TYPE> window::default_border = {u'┏', u'┓', u'┗',
-                                                 u'┛', u'━', u'┃'};
+std::vector<CHAR_TYPE> window::default_border = {L'┏', L'┓', L'┗',
+                                                 L'┛', L'━', L'┃'};
 
 int window::resize(const int &width, const int &height) {
   this->width = width;
@@ -32,6 +32,8 @@ int main() {
   int x = 6;
   int y = 7;
   t.resize(x, y);
+
+  printf("%llud\n", sizeof(wchar_t));
 
   w.set_border(w.default_border);
 }
