@@ -1,9 +1,9 @@
-#include <memory>
+﻿#include <memory>
 #include <vector>
 
 namespace charcoal {
 
-#define CHAR_TYPE char16_t
+#define CHAR_TYPE wchar_t
 
 class window {
 private:
@@ -32,10 +32,7 @@ public:
 
     this->buffer.reserve(width * height);
   }
-  window() {
-    // window with minimum height while leaving space for a border
-    window(1, 1);
-  }
+  window() : window(3, 3) {}
 
   int resize(const int &width, const int &height);
   int set_border(const CHAR_TYPE &ul, const CHAR_TYPE &ur, const CHAR_TYPE &ll,
