@@ -1,4 +1,7 @@
 .vscode/
+.vs/
+
+out/
 *.out
 
 # Makefile in the main directory for testing purposes
